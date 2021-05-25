@@ -23,8 +23,6 @@
       </div>
     </v-app-bar>
 
-    <v-spacer></v-spacer>
-
     <v-navigation-drawer
       app
       clipped
