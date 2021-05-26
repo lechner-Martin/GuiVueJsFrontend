@@ -1,153 +1,196 @@
 <template>
-  <v-container>
-    <v-row class="text-center">
-      <v-col cols="12">
-        <v-img
-          :src="require('../assets/logo.svg')"
-          class="my-3"
-          contain
-          height="200"
-        />
-      </v-col>
+  <v-card
+    outlined
+    class="ma-5"
+  >
+    <v-card-title>
+      Dienste
 
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Services
-        </h1>
+      <v-spacer></v-spacer>
 
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a
-            href="https://community.vuetifyjs.com"
-            target="_blank"
-          >Discord Community</a>
-        </p>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
+      <v-dialog
+        max-width="500px"
+        persistent
+        v-model="showNewServiceDialog"
       >
-        <h2 class="headline font-weight-bold mb-3">
-          What's next?
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            dark
+            elevation="0"
+            class="mb-2"
+            v-bind="attrs"
+            v-on="on"
           >
-            {{ next.text }}
-          </a>
-        </v-row>
-      </v-col>
+            Neuen Dienst Hinzufügen
+          </v-btn>
+        </template>
 
-      <v-col
-        class="mb-5"
-        cols="12"
+        <v-card>
+          <v-card-title>
+            <span class="headline">Neuen Dienst Hinzufügen</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col
+                  cols="6"
+                >
+                  <v-text-field
+                    v-model="newService.serviceName"
+                    label="Name"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  cols="6"
+                >
+                  <v-text-field
+                    v-model="newService.employee"
+                    label="Mitarbeiter"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="6"
+                >
+                  <v-text-field
+                    v-model="newService.date"
+                    label="Datum"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  cols="6"
+                >
+                  <v-text-field
+                    v-model="newService.address"
+                    label="Adresse"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="closeNewServiceDialog"
+            >
+              Abbrechen
+            </v-btn>
+            <v-btn
+             color="blue darken-1"
+             text
+             @click="saveNewService"
+            >
+              Hinzufügen
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card-title>
+
+    <v-card-text>
+      <v-data-table
+        :headers="headers"
+        :items="services"
+        disable-pagination
+        hide-default-footer
       >
-        <h2 class="headline font-weight-bold mb-3">
-          Important Links
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            @click="editService(item)"
           >
-            {{ link.text }}
-          </a>
-        </v-row>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          Ecosystem
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            class="mr-2"
+            @click="deleteService(item)"
           >
-            {{ eco.text }}
-          </a>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+            mdi-delete
+          </v-icon>
+        </template>
+      </v-data-table>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'HelloWorld',
+  name: 'Services',
 
   data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader'
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify'
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify'
-      }
+    newService: {
+      serviceName: '',
+      employee: '',
+      date: '',
+      address: ''
+    },
+    defaultNewService: {
+      serviceName: '',
+      employee: '',
+      date: '',
+      address: ''
+    },
+    showNewServiceDialog: false,
+
+    headers: [
+      { text: 'ID', value: 'id' },
+      { text: 'Name', value: 'serviceName' },
+      { text: 'Mitarbeiter', value: 'employee' },
+      { text: 'Datum', value: 'date' },
+      { text: 'Latitude', value: 'latitude' },
+      { text: 'Longitude', value: 'longitude' },
+      { text: 'Aktionen', value: 'actions', sortable: false }
     ],
-    importantLinks: [
+    services: [
       {
-        text: 'Documentation',
-        href: 'https://vuetifyjs.com'
+        id: 0,
+        serviceName: 'Putzen',
+        employee: 'Hubert Sauerampfer',
+        date: '09.03.2019 12:33',
+        latitude: '13.6251',
+        longitude: '19.9172'
       },
       {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com'
+        id: 1,
+        serviceName: 'Rasenmähen',
+        employee: 'Hubert Sauerampfer',
+        date: '09.04.2019 13:37',
+        latitude: '17.6251',
+        longitude: '20.9172'
       },
       {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuejs.com/vuetify'
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs'
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify'
-      }
-    ],
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com/components/api-explorer'
-      },
-      {
-        text: 'Select a layout',
-        href: 'https://vuetifyjs.com/getting-started/pre-made-layouts'
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions'
+        id: 2,
+        serviceName: 'Heckenschneiden',
+        employee: 'Franz Mayer',
+        date: '22.04.2019 18:00',
+        latitude: '14.4018',
+        longitude: '48.310845'
       }
     ]
-  })
+  }),
+
+  methods: {
+    closeNewServiceDialog () {
+      this.showNewServiceDialog = false
+      this.$nextTick(() => {
+        this.newService = Object.assign({}, this.defaultNewService)
+      })
+    },
+
+    saveNewService () {
+      // TODO save data
+      this.closeNewServiceDialog()
+    }
+  }
 })
 </script>
