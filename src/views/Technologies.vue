@@ -45,6 +45,10 @@
             Auf JavaScript basierende Programmiersprache welche JS um statische Typisierung erweitert
             und schließlich wieder zu JS kompiliert wird.
           </li>
+          <li>
+            <strong><a href="https://date-fns.org/">date-fns</a>:</strong>
+            Datum utility library.
+          </li>
         </ul>
       </p>
     </v-card-text>
