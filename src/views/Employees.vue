@@ -114,6 +114,7 @@ export default Vue.extend({
         this.newEmployee = Object.assign({}, this.defaultNewEmployee)
       })
     },
+
     saveNewEmployee () {
       employeesStore.addEmployee(this.newEmployee)
       this.closeNewEmployeeDialog()
