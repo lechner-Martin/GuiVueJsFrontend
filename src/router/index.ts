@@ -16,6 +16,11 @@ const routes: Array<RouteConfig> = [
     component: Services
   },
   {
+    path: '/map',
+    name: 'Dienstkarte',
+    component: () => import('../views/ServicesMap.vue')
+  },
+  {
     path: '/employees',
     name: 'Mitarbeiter',
     component: () => import('../views/Employees.vue')

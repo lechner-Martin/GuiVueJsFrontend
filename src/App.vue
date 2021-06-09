@@ -64,6 +64,7 @@ export default Vue.extend({
   data: () => ({
     navItems: [
       { title: 'Dienste', icon: 'mdi-face-agent', view: '/services' },
+      { title: 'Dienstkarte', icon: 'mdi-map', view: '/map' },
       { title: 'Mitarbeiter', icon: 'mdi-clipboard-account-outline', view: 'employees' },
       { title: 'Technologien', icon: 'mdi-vuejs', view: '/technologies' }
     ]
